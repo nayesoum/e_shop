@@ -15,63 +15,65 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $colors =['black', 'white', 'yellow' , 'red'];
-        $dataColor = [];
-        for($i = 0; $i < count($color); $i++){
+        $faker = Faker\Factory::create();
+
+        $colors =['black', 'white', 'yellow' , 'red'];// i est egale  a 0 compte le nombre de couleurs qu'il y a dans le tableau et ajoute 1 et boucle encore 
+        $dataColors = [];
+        for($i = 0; $i < count($colors); $i++){
             $color = new Color();// ici je met au monde une couleur
             $color -> setName($colors[$i]);// ici le $i correspond a l'index de mon tableau colors 
-            $dataColor[] = $color;
             $manager->persist($color);
+            $dataColors[] = $color;
         }
         $sizes =['xs', 's', 'm' , 'l', 'xl'];
-        $dataSize = [];
-        for($i = 0; $i < count($size); $i++){
+        $dataSizes =[];
+        foreach ($sizes as $s){//dans toutes les sizes prend moi une size
             $size = new Size();
-            $size -> setName($sizes[$i]);// ici le $i correspond a l'index de mon tableau colors 
-            $dataSize[] = $size;
+            $size -> setName($s);// ici le $i correspond a l'index de mon tableau colors 
             $manager->persist($size);
+            $dataSizes[] = $size;
         }
 
         $prices =[29, 39, 49 , 59];
-        $dataPrices = [];
-        for($i = 0; $i < count($prices); $i++){
-            $price = new Color();
-            $price -> setName($prices[$i]);// ici le $i correspond a l'index de mon tableau colors 
-            $dataPrices[] = $price;
+        $dataPrices =[];
+        foreach ($prices as $p){//dans toutes les prices prend moi une price
+            $price = new Price();
+            $price->setAmount($p);// ici le $i correspond a l'index de mon tableau colors 
             $manager->persist($price);
+            $dataPrices[] = $price;// on le met aprés pour qu'il est la donner
         }
 
-        $titles = ['Dahu', 'Seoul', 'Auburn'];
+        $references = ['Dahu', 'Seoul', 'Auburn'];
         $images = [
             'https://thumbs.dreamstime.com/b/la-mode-v%C3%AAtx-l-illustration-bleue-de-forme-de-t-shirt-8229384.jpg',
             'https://img.myloview.fr/images/illustration-unique-de-vecteur-de-dessin-anime-t-shirt-bleu-700-145918035.jpg',
             'https://previews.123rf.com/images/siberica/siberica1601/siberica160100173/51442205-t-shirt-croquis-homme-isol%C3%A9-sur-fond-blanc-vector-illustration-.jpg'
         ];
 
-        $dataTitles = [];
-        for ($i = 0; $i < count($color); $i++){
-            $title = new title();//je declare une variable article
-            $title
-                ->setTitle($title[$i])  //créer un titre 
-                ->setPrice($dataPrices[$i]) 
-                ->setDescription(implode('', $faker->sentences($faker->randomDigitNotNull)))//ici je lui dis de me créer un texte avec 150 mots 
-                ->setSlug(strtolower($titles[$i]))
+        $dataReferences = [];
+        for ($i = 0; $i < count($references); $i++){
+            $ref = new Reference();//je declare une variable article
+            $ref
+                ->setTitle($references[$i])  //créer un titre 
+                ->setPrice($faker->randomElement($dataPrices)) 
+                ->setDescription($faker->text(200))//ici je lui dis de me créer un texte avec 150 mots 
+                ->setSlug(strtolower($references[$i]))
                 ->setImage($images[$i]);// ici je donne la dimention de l' image
-                $dataTitles[] = $title;
-            $manager->persist($title);
+                $manager->persist($ref);
+                $dataReferences[] = $ref;
         } 
         // $product = new Product();
         // $manager->persist($product);
         for ($i = 0; $i < 15; $i++){
             $article = new article();//je declare une variable article
-        $article
-            ->setColor($faker->unique()->title())  //créer un titre 
-            ->setSize($faker->sentence(150))//ici je lui dis de me créer un texte avec 150 mots 
-            ->setPrice($faker->randomElement($dataCategories))
-            ->setImage($faker->imageUrl(640, 480, 'animals', true));// ici je donne la dimention de l' image
-        $manager->persist($article);
+            $article->setReference($dataReferences[array_rand($dataReferences)])
+            ->setColor($dataColors[array_rand($dataColors)])  //créer un titre 
+            ->setSize($dataSizes[array_rand($dataSizes)])// 
+            ->setQty(rand(0, 10 ));
+            
+            $manager->persist($article);
         }
         
+        $manager->flush();
     }
-    $manager->flush();
 }

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} -{{ reference.title}} {% endblock %}
+
+{% block body %}
+<h1>Accueil</h1>
+{{ dump(references )}}
+
+
+<section id="home" class="container">
+    <div class="row">
+        {% for ref in references %}
+        <div class="col-md-4 col-sm-12">
+            <div class="card">
+            <img src="{{reference.image}}" class="card-img-top" alt="{{reference.slug}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{reference.title}}</h5>
+                    <p class="card-text">{{reference.description}}</p>
+                    <p>{{reference.price.amount}} €</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </section>
+
+{% endfor %}
+
+{% endblock %}

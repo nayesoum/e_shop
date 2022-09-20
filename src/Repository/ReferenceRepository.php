@@ -9,9 +9,9 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Reference>
  *
- * @method Reference|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Reference|null find($id, $lockMode = null, $lockVersion = null)// elle prend en paramettre l'id soit un objet soit null si l'id est pas trouver
  * @method Reference|null findOneBy(array $criteria, array $orderBy = null)
- * @method Reference[]    findAll()
+ * @method Reference[]    findAll()// elle va rechercher tous
  * @method Reference[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ReferenceRepository extends ServiceEntityRepository
